@@ -7,7 +7,7 @@ _NB: Does not work for Web or iOS._
 ## Install
 
 ```bash
-npm install capacitor-serial
+npm install @adeunis/capacitor-serial
 npx cap sync
 ```
 
