@@ -25,11 +25,19 @@ public class SerialPlugin: CAPPlugin {
         call.unimplemented("Not implemented on iOS.")
   }
 
+ @objc func registerReadRawCallback(_ call: CAPPluginCall) {
+        call.unimplemented("Not implemented on iOS.")
+  }
+
  @objc func requestSerialPermissions(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
   }
 
   @objc func unregisterReadCallback(_ call: CAPPluginCall) {
+        call.unimplemented("Not implemented on iOS.")
+  }
+
+  @objc func unregisterReadRawCallback(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
   }
 
