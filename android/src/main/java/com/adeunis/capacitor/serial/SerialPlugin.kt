@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.usb.UsbManager
+import android.util.Base64
 import android.util.Log
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
@@ -35,6 +36,7 @@ class SerialPlugin : Plugin() {
     private val threadExecutor = Executors.newSingleThreadExecutor()
     private var serialIoManager: SerialInputOutputManager? = null
     private var readCallback: PluginCall? = null
+    private var readRawCallback: PluginCall? = null
 
     //Connection parameters
     private var baudRate = DEFAULT_BAUD_RATE
@@ -265,7 +267,12 @@ class SerialPlugin : Plugin() {
             val data = ByteArray(readSize)
             System.arraycopy(buffer, 0, data, 0, readSize)
             readBuffer.clear()
-            response.put("data", data.decodeToString())
+            response.put(
+                "data", when (call.getBoolean("readRaw")) {
+                    true -> Base64.encodeToString(data, Base64.DEFAULT)
+                    else -> data.decodeToString()
+                }
+            )
             call.resolve(response)
 
 
@@ -281,6 +288,15 @@ class SerialPlugin : Plugin() {
         }
     }
 
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    fun registerReadRawCallback(call: PluginCall) {
+        execute {
+            Log.i(TAG, "Registering Read Raw Callback")
+            readRawCallback = call
+            call.setKeepAlive(true)
+        }
+    }
+
     @PluginMethod(returnType = PluginMethod.RETURN_NONE)
     fun unregisterReadCallback(call: PluginCall) {
         execute {
@@ -290,19 +306,44 @@ class SerialPlugin : Plugin() {
         }
     }
 
+    @PluginMethod(returnType = PluginMethod.RETURN_NONE)
+    fun unregisterReadRawCallback(call: PluginCall) {
+        execute {
+            Log.i(TAG, "Unregistering Read Raw Callback")
+            readRawCallback = null
+            call.resolve()
+        }
+    }
+
     private fun onSerialIoNewData(data: ByteArray) {
-        val readCallback = readCallback ?: return
-        val response = JSObject()
-        response.put("data", data.decodeToString())
-        readCallback.resolve(response)
+        val readCallback = readCallback;
+        if (readCallback != null) {
+            val response = JSObject()
+            response.put("data", data.decodeToString())
+            readCallback.resolve(response)
+        }
+        val readRawCallback = readRawCallback;
+        if (readRawCallback != null) {
+            val response = JSObject()
+            response.put("data", Base64.encodeToString(data, Base64.DEFAULT))
+            readRawCallback.resolve(response)
+        }
 
     }
 
     private fun onSerialIoRunError() {
-        val readCallback = readCallback ?: return
-        val response = JSObject()
-        response.put("error", CONNECTION_ERROR)
-        readCallback.resolve(response)
+        val readCallback = readCallback;
+        if (readCallback != null) {
+            val response = JSObject()
+            response.put("error", CONNECTION_ERROR)
+            readCallback.resolve(response)
+        }
+        val readRawCallback = readRawCallback;
+        if (readRawCallback != null) {
+            val response = JSObject()
+            response.put("error", CONNECTION_ERROR)
+            readRawCallback.resolve(response)
+        }
     }
 
     public override fun handleOnStart() {

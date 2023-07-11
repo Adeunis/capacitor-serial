@@ -21,6 +21,10 @@ export interface SerialMessage {
     data: string;
 }
 
+export interface SerialReadParameters {
+    readRaw: boolean;
+}
+
 export enum SerialDriverEnum {
     FTDI_SERIAL_DRIVER = "FtdiSerialDriver",
     CDC_ACM_SERIAL_DRIVER = "CdcAcmSerialDriver",
@@ -86,13 +90,14 @@ export interface SerialPlugin {
     /**
      * Read from a serial connection
      *
+     * @param parameters {SerialReadParameters} specify if the read data should be sent back as 'raw', meaning the byte array encoded in base64 string, or as a UTF-8 decoded string
      * @return {Promise<SerialMessage>} Returns a promise that resolves with data read from the serial connection
      */
-    read(): Promise<SerialMessage>;
+    read(parameters: SerialReadParameters): Promise<SerialMessage>;
 
     /**
      * Register a callback to receive the incoming data from the serial connection
-     * @param callback {SerialReadCallback} the callback called each time there is incoming data from the serial connection
+     * @param callback {SerialReadCallback} the callback called each time there is incoming data from the serial connection, the data being a UTF-8 decoded string
      * @returns {Promise<string>} returns a promise with the callbackId
      */
     registerReadCallback(callback: SerialReadCallback): Promise<string>;
@@ -103,5 +108,19 @@ export interface SerialPlugin {
      * @returns {Promise<void>} returns a promise that resolves when the unregistration is done
      */
     unregisterReadCallback(): Promise<void>;
+
+    /**
+     * Register a callback to receive the incoming raw data from the serial connection
+     * @param callback {SerialReadCallback} the callback called each time there is incoming data from the serial connection, the data being the byte array encoded in base64 string
+     * @returns {Promise<string>} returns a promise with the callbackId
+     */
+    registerReadRawCallback(callback: SerialReadCallback): Promise<string>;
+
+    /**
+     * Unregister the read raw callback
+     *
+     * @returns {Promise<void>} returns a promise that resolves when the unregistration is done
+     */
+    unregisterReadRawCallback(): Promise<void>;
 
 }
