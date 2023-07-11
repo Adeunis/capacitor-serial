@@ -37,7 +37,7 @@ npx cap sync
     
     
     //Read
-    Serial.read().then((message) => log.info(message.data));
+    Serial.read({readRaw: false}).then((message) => log.info(message.data));
 
     //Read callback 
     Serial.registerReadCallback((message, error) => {
@@ -63,9 +63,11 @@ npx cap sync
 * [`closeConnection()`](#closeconnection)
 * [`write(...)`](#write)
 * [`writeHexadecimal(...)`](#writehexadecimal)
-* [`read()`](#read)
+* [`read(...)`](#read)
 * [`registerReadCallback(...)`](#registerreadcallback)
 * [`unregisterReadCallback()`](#unregisterreadcallback)
+* [`registerReadRawCallback(...)`](#registerreadrawcallback)
+* [`unregisterReadRawCallback()`](#unregisterreadrawcallback)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -148,13 +150,17 @@ Write a hexadecimal message to a serial connection
 --------------------
 
 
-### read()
+### read(...)
 
 ```typescript
-read() => Promise<SerialMessage>
+read(parameters: SerialReadParameters) => Promise<SerialMessage>
 ```
 
 Read from a serial connection
+
+| Param            | Type                                                                  | Description                                                                                                                          |
+| ---------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **`parameters`** | <code><a href="#serialreadparameters">SerialReadParameters</a></code> | specify if the read data should be sent back as 'raw', meaning the byte array encoded in base64 string, or as a UTF-8 decoded string |
 
 **Returns:** <code>Promise&lt;<a href="#serialmessage">SerialMessage</a>&gt;</code>
 
@@ -169,9 +175,9 @@ registerReadCallback(callback: SerialReadCallback) => Promise<string>
 
 Register a callback to receive the incoming data from the serial connection
 
-| Param          | Type                                                              | Description                                                                     |
-| -------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| **`callback`** | <code><a href="#serialreadcallback">SerialReadCallback</a></code> | the callback called each time there is incoming data from the serial connection |
+| Param          | Type                                                              | Description                                                                                                            |
+| -------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#serialreadcallback">SerialReadCallback</a></code> | the callback called each time there is incoming data from the serial connection, the data being a UTF-8 decoded string |
 
 **Returns:** <code>Promise&lt;string&gt;</code>
 
@@ -185,6 +191,34 @@ unregisterReadCallback() => Promise<void>
 ```
 
 Unregister the read callback
+
+--------------------
+
+
+### registerReadRawCallback(...)
+
+```typescript
+registerReadRawCallback(callback: SerialReadCallback) => Promise<string>
+```
+
+Register a callback to receive the incoming raw data from the serial connection
+
+| Param          | Type                                                              | Description                                                                                                                             |
+| -------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **`callback`** | <code><a href="#serialreadcallback">SerialReadCallback</a></code> | the callback called each time there is incoming data from the serial connection, the data being the byte array encoded in base64 string |
+
+**Returns:** <code>Promise&lt;string&gt;</code>
+
+--------------------
+
+
+### unregisterReadRawCallback()
+
+```typescript
+unregisterReadRawCallback() => Promise<void>
+```
+
+Unregister the read raw callback
 
 --------------------
 
@@ -225,6 +259,13 @@ Unregister the read callback
 | Prop       | Type                |
 | ---------- | ------------------- |
 | **`data`** | <code>string</code> |
+
+
+#### SerialReadParameters
+
+| Prop          | Type                 |
+| ------------- | -------------------- |
+| **`readRaw`** | <code>boolean</code> |
 
 
 ### Type Aliases

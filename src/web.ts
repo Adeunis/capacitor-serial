@@ -6,7 +6,8 @@ import type {
   SerialPlugin,
   SerialMessage,
   SerialPermissions,
-  SerialReadCallback
+  SerialReadCallback,
+  SerialReadParameters
 } from './definitions';
 
 export class SerialWeb extends WebPlugin implements SerialPlugin {
@@ -18,7 +19,7 @@ export class SerialWeb extends WebPlugin implements SerialPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  read(): Promise<SerialMessage> {
+  read(_: SerialReadParameters): Promise<SerialMessage> {
     throw this.unimplemented('Not implemented on web.');
   }
 
@@ -40,6 +41,14 @@ export class SerialWeb extends WebPlugin implements SerialPlugin {
 
   writeHexadecimal(_: SerialMessage): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
+  }
+
+  registerReadRawCallback(_: SerialReadCallback): Promise<string> {
+    return Promise.resolve("");
+  }
+
+  unregisterReadRawCallback(): Promise<void> {
+    return Promise.resolve(undefined);
   }
 
 }
