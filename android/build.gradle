@@ -7,14 +7,14 @@ ext {
 
 buildscript {
     ext {
-        kotlin_version = '1.8.20'
+        kotlin_version = '1.9.10'
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -24,10 +24,10 @@ apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace "com.adeunis.capacitor.serial"
-    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 33
+    compileSdk project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 34
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 24
-        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 33
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -59,8 +59,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation 'com.github.mik3y:usb-serial-for-android:3.5.1'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'com.github.mik3y:usb-serial-for-android:3.8.0'
+    implementation 'androidx.core:core-ktx:1.13.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
 
