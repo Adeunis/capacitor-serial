@@ -1,9 +1,11 @@
 package com.adeunis.capacitor.serial
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.usb.UsbManager
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import com.getcapacitor.JSObject
@@ -104,22 +106,34 @@ class SerialPlugin : Plugin() {
             val safeDriver = availableDrivers.first()
             driver = safeDriver
             val device = safeDriver.device
+            val actionIntent = Intent(SerialPermissionsBroadcastReceiver.USB_PERMISSION)
+            actionIntent.setPackage(context.packageName)
+
             val pendingIntent = PendingIntent.getBroadcast(
                 this.context,
                 0,
-                Intent(SerialPermissionsBroadcastReceiver.USB_PERMISSION),
+                actionIntent,
                 PendingIntent.FLAG_MUTABLE
             )
 
             val filter = IntentFilter()
             filter.addAction(SerialPermissionsBroadcastReceiver.USB_PERMISSION)
 
-            this.context.registerReceiver(
-                SerialPermissionsBroadcastReceiver(
-                    call,
-                    this.context
-                ), filter
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                this.context.registerReceiver(
+                    SerialPermissionsBroadcastReceiver(
+                        call,
+                        this.context
+                    ), filter, Context.RECEIVER_NOT_EXPORTED
+                )
+            } else {
+                this.context.registerReceiver(
+                    SerialPermissionsBroadcastReceiver(
+                        call,
+                        this.context
+                    ), filter
+                )
+            }
 
             usbManager.requestPermission(device, pendingIntent)
 
