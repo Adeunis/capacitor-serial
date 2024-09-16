@@ -9,9 +9,7 @@
   "files": [
     "android/src/main/",
     "android/build.gradle",
-    "dist/",
-    "ios/Plugin/",
-    "CapacitorSerial.podspec"
+    "dist/"
   ],
   "author": "Adeunis",
   "license": "MIT",
@@ -68,9 +66,6 @@
     "extends": "@ionic/eslint-config/recommended"
   },
   "capacitor": {
-    "ios": {
-      "src": "ios"
-    },
     "android": {
       "src": "android"
     }
