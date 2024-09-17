@@ -268,12 +268,19 @@ Unregister the read raw callback
 | **`readRaw`** | <code>boolean</code> |
 
 
+#### SerialErrorWrapper
+
+| Prop          | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`message`** | <code><a href="#serialerror">SerialError</a></code> |
+
+
 ### Type Aliases
 
 
 #### SerialReadCallback
 
-<code>(message: <a href="#serialmessage">SerialMessage</a>, error?: <a href="#serialerror">SerialError</a>): void</code>
+<code>(message: <a href="#serialmessage">SerialMessage</a>, error?: <a href="#serialerrorwrapper">SerialErrorWrapper</a>): void</code>
 
 
 ### Enums

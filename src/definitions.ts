@@ -41,8 +41,12 @@ export enum SerialError {
     PORT_CLOSED_ERROR = "PORT_CLOSED_ERROR"
 }
 
+export interface SerialErrorWrapper extends Error {
+    message: SerialError
+}
 
-export type SerialReadCallback = (message: SerialMessage | undefined, error?: SerialError) => void;
+
+export type SerialReadCallback = (message: SerialMessage | undefined, error?: SerialErrorWrapper) => void;
 
 
 export interface SerialPlugin {

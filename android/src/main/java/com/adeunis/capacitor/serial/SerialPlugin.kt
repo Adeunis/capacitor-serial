@@ -348,15 +348,11 @@ class SerialPlugin : Plugin() {
     private fun onSerialIoRunError() {
         val readCallback = readCallback;
         if (readCallback != null) {
-            val response = JSObject()
-            response.put("error", CONNECTION_ERROR)
-            readCallback.resolve(response)
+            readCallback.reject(CONNECTION_ERROR)
         }
         val readRawCallback = readRawCallback;
         if (readRawCallback != null) {
-            val response = JSObject()
-            response.put("error", CONNECTION_ERROR)
-            readRawCallback.resolve(response)
+            readRawCallback.reject(CONNECTION_ERROR)
         }
     }
 
