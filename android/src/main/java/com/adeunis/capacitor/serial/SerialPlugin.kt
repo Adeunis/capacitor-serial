@@ -35,7 +35,6 @@ class SerialPlugin : Plugin() {
 
     private var driver: UsbSerialDriver? = null
     private var port: UsbSerialPort? = null
-    private val threadExecutor = Executors.newSingleThreadExecutor()
     private var serialIoManager: SerialInputOutputManager? = null
     private var readCallback: PluginCall? = null
     private var readRawCallback: PluginCall? = null
@@ -421,7 +420,7 @@ class SerialPlugin : Plugin() {
         Log.i(TAG, "Starting Serial IO Manager.")
         serialIoManager?.stop()
         serialIoManager = SerialInputOutputManager(port, serialIoListener)
-        threadExecutor.submit(serialIoManager)
+        serialIoManager?.start()
     }
 
     private fun String.toByteArrayFromHexadecimal(): ByteArray =
