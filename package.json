@@ -1,6 +1,6 @@
 {
   "name": "@adeunis/capacitor-serial",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Connection over Serial on Android devices for Capacitor projects",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
